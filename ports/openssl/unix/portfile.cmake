@@ -6,6 +6,8 @@ vcpkg_extract_source_archive_ex(
     OUT_SOURCE_PATH MASTER_COPY_SOURCE_PATH
     ARCHIVE "${ARCHIVE}"
     REF ${OPENSSL_VERSION}
+    PATCHES
+        unix/EnableiOSarmv7sarm64eSupport.patch
 )
 
 if(CMAKE_HOST_WIN32)

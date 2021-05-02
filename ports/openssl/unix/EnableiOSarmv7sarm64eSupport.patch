@@ -1,0 +1,59 @@
+diff --git a/Configurations/15-ios.conf b/Configurations/15-ios.conf
+index f404077fda..91e46990d3 100644
+--- a/Configurations/15-ios.conf
++++ b/Configurations/15-ios.conf
+@@ -12,22 +12,44 @@ my %targets = (
+         sys_id           => "iOS",
+         disable          => [ "engine", "async" ],
+     },
+-    "ios-xcrun" => {
++    "ios32-common" => {
+         inherit_from     => [ "ios-common", asm("armv4_asm") ],
+-        # It should be possible to go below iOS 6 and even add -arch armv6,
+-        # thus targeting iPhone pre-3GS, but it's assumed to be irrelevant
+-        # at this point.
+         CC               => "xcrun -sdk iphoneos cc",
+-        cflags           => add("-arch armv7 -mios-version-min=6.0.0 -fno-common"),
+         perlasm_scheme   => "ios32",
+     },
+-    "ios64-xcrun" => {
++    "ios64-common" => {
+         inherit_from     => [ "ios-common", asm("aarch64_asm") ],
+         CC               => "xcrun -sdk iphoneos cc",
+-        cflags           => add("-arch arm64 -mios-version-min=7.0.0 -fno-common"),
+         bn_ops           => "SIXTY_FOUR_BIT_LONG RC4_CHAR",
+         perlasm_scheme   => "ios64",
+     },
++    "ios-armv7-xcrun" => {
++        inherit_from     => [ "ios32-common" ],
++        # It should be possible to go below iOS 6 and even add -arch armv6,
++        # thus targeting iPhone pre-3GS, but it's assumed to be irrelevant
++        # at this point.
++        cflags           => add("-arch armv7 -mios-version-min=6.0.0 -fno-common"),
++    },
++    "ios-armv7s-xcrun" => {
++        inherit_from     => [ "ios32-common" ],
++        cflags           => add("-arch armv7s -mios-version-min=6.0.0 -fno-common"),
++    },
++    "ios-arm64-xcrun" => {
++        inherit_from     => [ "ios64-common" ],
++        cflags           => add("-arch arm64 -mios-version-min=7.0.0 -fno-common"),
++    },
++    "ios-arm64e-xcrun" => {
++        inherit_from     => [ "ios64-common" ],
++        cflags           => add("-arch arm64e -mios-version-min=12.0.0 -fno-common"),
++    },
++    "ios-xcrun" => {
++        # alias
++        inherit_from     => [ "ios-armv7-xcrun" ],
++    },
++    "ios64-xcrun" => {
++        # alias
++        inherit_from     => [ "ios-arm64-xcrun" ],
++    },
+     "iossimulator-xcrun" => {
+         inherit_from     => [ "ios-common" ],
+         CC               => "xcrun -sdk iphonesimulator cc",
+-- 
+2.31.1
+
